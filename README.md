@@ -1,5 +1,5 @@
 # Bash
-This repo aims to provide common bash script form using.  
+This repo aims to provide common bash script for using in production.  
 
 ## Usage
 ### nginx_with_php.sh
