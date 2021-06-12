@@ -2,6 +2,9 @@
 
 source ./common
 
+# capture_linux_version from common.sh
+LINUX_VERSION=$(capture_linux_version)
+
 if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     echo "This bash required root permission."
     exit 0
