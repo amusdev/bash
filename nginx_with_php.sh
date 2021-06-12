@@ -16,6 +16,11 @@ while [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]] do
     read -s "PHP Version: " VERSION
 done
 
+if ! hash nginx; then
+    echo "Detected nginx not yet installed, will install nginx first."
+    apt-get -y install nginx
+fi
+
 add-apt-repository ppa:ondrej/php
 apt-get update
 # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
