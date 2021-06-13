@@ -65,7 +65,7 @@ then
     add-apt-repository ppa:ondrej/php
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-    update-alternatives --set php /usr/bin/php${VERSION}
+    #update-alternatives --set php /usr/bin/php${VERSION}
 elif [ LINUX_OS -eq "Debian" ];
 then
     apt -y install lsb-release apt-transport-https ca-certificates
@@ -73,15 +73,18 @@ then
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-    update-alternatives --set php /usr/bin/php${VERSION}
+    #update-alternatives --set php /usr/bin/php${VERSION}
 elif [ LINUX_OS -eq "CentOS" ];
 then
     yum -y install epel-release
     yum -y install https://rpms.remirepo.net/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
     yum makecache
     eval "yum -y install openssl php${VERSION/\./} $(build_extension_string "php${VERSION/\./}-php-")"
-    update-alternatives --set php /usr/bin/php${VERSION}
 fi
 
 tput reset
 echo "Successful install Nginx and PHP with version: $VERSION"
+if [ LINUX_OS -eq "CentOS" ];
+    VERSION=${VERSION/\./}
+fi
+echo "Tips: you could run `php$VERSION -v` to view installed php."
