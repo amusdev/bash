@@ -28,3 +28,20 @@ function capture_centos_major_verison(){
     version=$(rpm --eval '%{centos}')
     expr ${version:-0}
 }
+
+# Environment checking
+function check_env(){
+    if [[ $LINUX_OS == "Others" ]]; then
+        return 2
+    fi
+
+    if [[ $LINUX_OS == "CentOS" ]]; then
+        if [ $CENTOS_MAJOR_VERSION -lt 5 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
+            return 3
+        fi
+    fi
+
+    if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+        return 1
+    fi
+}
