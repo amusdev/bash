@@ -15,7 +15,7 @@ function install_mysql(){
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
             curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
             echo mysql-apt-config mysql-apt-config/enable-repo select mysql-${VERSION} | debconf-set-selections
-            dpkg -i ./mysql_config.deb
+            DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
         elif [[ $LINUX_OS == "CentOS" ]]; then
