@@ -63,6 +63,13 @@ function print_php_finish(){
  [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null)) && IS_SOURCED_BASH=1 || IS_SOURCED_BASH=0
  
  if [ $IS_SOURCED_BASH -eq 0 ]; then
+    source <(curl -s https://amusdev.github.io/bash/common.sh)
+
+    # capture_linux_version from common.sh
+    LINUX_OS=$(capture_linux_version)
+    # capture_centos_major_verison from common.sh
+    CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
+ 
     install_php
     tput reset
     print_php_finish
