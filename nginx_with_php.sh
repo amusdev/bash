@@ -9,20 +9,16 @@ LINUX_OS=$(capture_linux_version)
 # capture_centos_major_verison from common.sh
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-if [[ $LINUX_OS == "Others" ]]; then
+# check_env from common.sh
+check_env
+if [ $? -eq 1 ]; then
+    echo "This bash required root permission."
+    exit 1
+elif [ $? -eq 2 ]; then
     echo "This bash only executable on Ubuntu, Debian, CentOS."
     exit 1
-fi
-
-if [[ $LINUX_OS == "CentOS" ]]; then
-    if [ $CENTOS_MAJOR_VERSION -lt 5 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
-        echo "This bash only executable on CentOS 5 - 8."
-        exit 1
-    fi
-fi
-
-if [[ $(/usr/bin/id -u) -ne 0 ]]; then
-    echo "This bash required root permission."
+elif [ $? -eq 3 ]; then
+    echo "This bash only executable on CentOS 5 - 8."
     exit 1
 fi
 
