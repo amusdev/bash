@@ -32,7 +32,7 @@ function install_apache(){
 # ------------------------------------
 function print_apache_finish(){
     LINUX_OS = $1
-    [[ LINUX_OS == "CentOS" ]] && process="httpd" || process="apache2"
+    [[ $LINUX_OS == "CentOS" ]] && process="httpd" || process="apache2"
     echo "Successful install Apache2."
     echo "Tips: you could run \`systemctl status ${process}\` to view Apache2 status."
 }
