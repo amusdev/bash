@@ -59,5 +59,5 @@ function print_apache_finish(){
  
     install_apache
     tput reset
-    print_apache_finish LINUX_OS
+    print_apache_finish $LINUX_OS
  fi
