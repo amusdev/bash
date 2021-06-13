@@ -27,9 +27,14 @@ function install_apache(){
     systemctl start httpd
 }
 
+# ------------------------------------
+# print_apache_finish(string LINUX_OS)
+# ------------------------------------
 function print_apache_finish(){
+    LINUX_OS = $1
+    [[ LINUX_OS == "CentOS" ]] && process="httpd" || process="apache2"
     echo "Successful install Apache2."
-    echo "Tips: you could run \`systemctl httpd status\` to view Apache2 status."
+    echo "Tips: you could run \`systemctl status ${process}\` to view Apache2 status."
 }
 
 ([[ -n $ZSH_EVAL_CONTEXT && $ZSH_EVAL_CONTEXT =~ :file$ ]] || 
@@ -54,5 +59,5 @@ function print_apache_finish(){
  
     install_apache
     tput reset
-    print_apache_finish
+    print_apache_finish LINUX_OS
  fi
