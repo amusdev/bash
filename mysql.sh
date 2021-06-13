@@ -26,7 +26,8 @@ function install_mysql(){
             elif [[ $VERISON == "5.7" ]]; then
                 yum -y install https://repo.mysql.com/mysql57-community-release-el7-9.noarch.rpm
             fi
-            yum -y install mysql-community-server
+            sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+            yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
             executed=1
         fi
         
