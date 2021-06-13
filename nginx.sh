@@ -28,6 +28,10 @@ function install_nginx(){
     fi
 }
 
+function print_nginx_finish(){
+    echo "Successful install Nginx."
+}
+
 ([[ -n $ZSH_EVAL_CONTEXT && $ZSH_EVAL_CONTEXT =~ :file$ ]] || 
  [[ -n $KSH_VERSION && $(cd "$(dirname -- "$0")" &&
     printf '%s' "${PWD%/}/")$(basename -- "$0") != "${.sh.file}" ]] || 
@@ -35,4 +39,5 @@ function install_nginx(){
  
  if [ $IS_SOURCED_BASH -eq 0 ]; then
     install_nginx
+    print_nginx_finish
  fi
