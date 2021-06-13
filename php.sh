@@ -49,7 +49,7 @@ function install_php(){
     fi
 }
 
-function print_finish(){
+function print_php_finish(){
     echo "Successful install PHP with version: $VERSION"
     if [[ $LINUX_OS == "CentOS" ]]; then
         VERSION=${VERSION/\./}
@@ -65,5 +65,5 @@ function print_finish(){
  if [ $IS_SOURCED_BASH -eq 0 ]; then
     install_php
     tput reset
-    print_finish
+    print_php_finish
  fi
