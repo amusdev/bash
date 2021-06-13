@@ -17,6 +17,11 @@ execute this command will auto install custom PHP version
 ```bash
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash
 ```
+### Apache + PHP
+execute this command will auto install Apache2 latest vesion and custom PHP version
+```bash
+curl -s https://amusdev.github.io/bash/apache_with_php.sh | sudo bash
+```
 ### Nginx + PHP
 execute this command will auto install Nginx latest vesion and custom PHP version
 ```bash
