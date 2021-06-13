@@ -27,13 +27,5 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
 fi
 
 install_nginx
-if [ $? -ne 0 ]; then
-    echo "Sorry, we have an error during installing nginx."
-    exit 1
-fi
-install_php
-if [ $? -ne 0 ]; then
-    echo "Sorry, we have an error during installing php."
-    exit 1
-fi
+install_php $LINUX_OS $CENTOS_MAJOR_VERSION
 print_php_finish
