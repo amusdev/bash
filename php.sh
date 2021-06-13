@@ -13,7 +13,13 @@ function build_extension_string(){
     IFS=$old_ifs
 }
 
+# ------------------------------------------------------
+# install_php(string LINUX_OS, int CENTOS_MAJOR_VERSION)
+# ------------------------------------------------------
 function install_php(){
+    LINUX_OS=$1
+    CENTOS_MAJOR_VERSION=$2
+
     AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
 
     while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
@@ -70,7 +76,7 @@ function print_php_finish(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
  
-    install_php
+    install_php $LINUX_OS $CENTOS_MAJOR_VERSION
     tput reset
     print_php_finish
  fi
