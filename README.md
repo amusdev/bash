@@ -1,6 +1,11 @@
 # Bash
 This repo aims to provide common bash script for using in production.  
 
+## Installation
+```bash
+wget -qO https://amusdev.github.io/bash/<any bash script under usage> | bash
+```
+
 ## Usage
 ### nginx_with_php.sh
 ```bash
