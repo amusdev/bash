@@ -36,4 +36,4 @@ if [ $? -ne 0 ]; then
     echo "Sorry, we have an error during installing php."
     exit 1
 fi
-print_finish
+print_php_finish
