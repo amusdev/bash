@@ -8,16 +8,16 @@
 function capture_linux_version(){
     if hash hostnamectl; then
         if hostnamectl | grep -q "Ubuntu"; then
-            echo 1
+            echo "Ubuntu"
         elif hostnamectl | grep -q "Debian"; then
-            echo 2
+            echo "Debian"
         elif hostnamectl | grep -q "CentOS"; then
-            echo 3
+            echo "CentOS"
         else
-            echo 4
+            echo "Others"
         fi
     else
-        echo 4
+        echo "Others"
     fi
 }
 
@@ -25,5 +25,5 @@ function capture_linux_version(){
 # eg. 6.1.1028
 # will capture 6
 function capture_centos_major_verison(){
-    echo rpm --eval '%{centos}'
+    expr $(rpm --eval '%{centos}')
 }
