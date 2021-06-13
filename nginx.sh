@@ -16,15 +16,15 @@ function install_nginx(){
         elif hash yum; then
             yum -y install nginx
         fi
+    fi
 
-        # make sure linux firewall is opened for Nginx
-        if hash ufw; then
-            ufw allow 'Nginx HTTP'
-            ufw allow 'Nginx HTTPS'
-        elif hash firewall-cmd; then
-            firewall-cmd --permanent --zone=public --add-service=https --add-service=http
-            firewall-cmd --reload
-        fi
+    # make sure linux firewall is opened for Apache
+    if hash ufw; then
+        ufw allow 'Nginx HTTP'
+        ufw allow 'Nginx HTTPS'
+    elif hash firewall-cmd; then
+        firewall-cmd --permanent --zone=public --add-service=https --add-service=http
+        firewall-cmd --reload
     fi
 }
 
