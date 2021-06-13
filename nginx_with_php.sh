@@ -35,7 +35,7 @@ if ! hash nginx; then
     elif hash yum; then
         yum -y install nginx
     fi
-    
+
     # make sure linux firewall is opened for Nginx
     if hash ufw; then
         ufw allow 'Nginx HTTP'
@@ -50,21 +50,18 @@ fi
 EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
 
 function build_extension_string(){
-    concated_string=""
-    foreach ext EXTENDSIONS
-        concated_string+="$1${ext}"
-    end
-    echo concated_string
+    PREFIX_EXTENDSIONS=( "${EXTENDSIONS[@]/#/$1}" )
+    echo "${PREFIX_EXTENDSIONS[*]}"
 }
 
-if [[ LINUX_OS == "Ubuntu" ]];
+if [[ $LINUX_OS == "Ubuntu" ]];
 then
     apt -y install software-properties-common
     add-apt-repository ppa:ondrej/php
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
     #update-alternatives --set php /usr/bin/php${VERSION}
-elif [[ LINUX_OS == "Debian" ]];
+elif [[ $LINUX_OS == "Debian" ]];
 then
     apt -y install lsb-release apt-transport-https ca-certificates
     wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -72,7 +69,7 @@ then
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
     #update-alternatives --set php /usr/bin/php${VERSION}
-elif [[ LINUX_OS == "CentOS" ]];
+elif [[ $LINUX_OS == "CentOS" ]];
 then
     yum -y install epel-release
     yum -y install https://rpms.remirepo.net/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
