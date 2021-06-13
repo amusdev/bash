@@ -57,7 +57,7 @@ function build_extension_string(){
 if [[ $LINUX_OS == "Ubuntu" ]];
 then
     apt -y install software-properties-common
-    add-apt-repository ppa:ondrej/php
+    add-apt-repository -y ppa:ondrej/php
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
     #update-alternatives --set php /usr/bin/php${VERSION}
@@ -79,7 +79,7 @@ fi
 
 tput reset
 echo "Successful install Nginx and PHP with version: $VERSION"
-if [ LINUX_OS -eq "CentOS" ];
+if [ LINUX_OS -eq "CentOS" ]; then
     VERSION=${VERSION/\./}
 fi
 echo "Tips: you could run `php$VERSION -v` to view installed php."
