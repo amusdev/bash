@@ -25,5 +25,6 @@ function capture_linux_version(){
 # eg. 6.1.1028
 # will capture 6
 function capture_centos_major_verison(){
-    expr $(rpm --eval '%{centos}')
+    version=$(rpm --eval '%{centos}')
+    expr ${version:-0}
 }
