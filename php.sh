@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ $(/usr/bin/id -u) -ne 0 ]]; then
-    echo "This bash required root permission."
-    exit 1
-fi
-
 function build_extension_string(){
     old_ifs=$IFS
     IFS=" "
@@ -70,6 +65,13 @@ function print_php_finish(){
  
  if [ $IS_SOURCED_BASH -eq 0 ]; then
     source <(curl -s https://amusdev.github.io/bash/common.sh)
+
+    # check_env from common.sh
+    check_env
+    if [ $? -eq 1 ]; then
+        echo "This bash required root permission."
+        exit 1
+    fi
 
     # capture_linux_version from common.sh
     LINUX_OS=$(capture_linux_version)
