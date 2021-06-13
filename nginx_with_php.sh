@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./common.sh
+source <(curl -s https://amusdev.github.io/bash/common.sh)
 
 # capture_linux_version from common.sh
 LINUX_OS=$(capture_linux_version)
