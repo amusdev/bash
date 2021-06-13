@@ -48,6 +48,7 @@ if ! hash nginx; then
     fi
 fi
 
+# support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
 EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
 
 function build_extension_string(){
@@ -58,27 +59,24 @@ function build_extension_string(){
     echo concated_string
 }
 
-if [ LINUX_OS -eq "Ubuntu" ]; then
-    # install repository
+if [ LINUX_OS -eq "Ubuntu" ];
+then
     apt -y install software-properties-common
     add-apt-repository ppa:ondrej/php
     apt update
-    # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-elif [ LINUX_OS -eq "Debian" ]; then
-    # install repository
+elif [ LINUX_OS -eq "Debian" ];
+then
     apt -y install lsb-release apt-transport-https ca-certificates
     wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
     apt update
-    # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-elif [ LINUX_OS -eq "CentOS" ]; then
-    # install repository
+elif [ LINUX_OS -eq "CentOS" ];
+then
     yum -y install epel-release
     yum -y install https://rpms.remirepo.net/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
     yum makecache
-    # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
     eval "yum -y install openssl php${VERSION/\./} $(build_extension_string "php${VERSION/\./}-php-")"
 fi
 
