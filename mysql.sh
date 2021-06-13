@@ -17,7 +17,7 @@ function install_mysql(){
             echo mysql-apt-config mysql-apt-config/enable-repo select mysql-${VERSION} | debconf-set-selections
             dpkg -i ./mysql_config.deb
             apt update
-            apt install -y mysql-server
+            DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
         elif [[ $LINUX_OS == "CentOS" ]]; then
             if [[ $VERSION == "8.0" ]]; then
                 yum -y insall https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
