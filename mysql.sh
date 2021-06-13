@@ -12,19 +12,36 @@ function install_mysql(){
     done
     
     if ! hash mysqld 2>/dev/null; then
+        executed=0
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
             curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
             echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
             DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
+            executed=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
             if [[ $VERSION == "8.0" ]]; then
-                yum -y insall https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+                yum -y install https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
             elif [[ $VERISON == "5.7" ]]; then
-                yum -y insall https://repo.mysql.com/mysql57-community-release-el7-9.noarch.rpm
+                yum -y install https://repo.mysql.com/mysql57-community-release-el7-9.noarch.rpm
             fi
             yum -y install mysql-community-server
+            executed=1
+        fi
+        
+        if [ $executed -eq 1 ]; then
+            # mysql_secure_installation
+            # New password
+            mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+            # Remove anonymous users
+            mysql -e "DROP USER ''@'localhost'"
+            # Because our hostname varies we'll use some Bash magic here.
+            mysql -e "DROP USER ''@'$(hostname)'"
+            # Remove test database and access to it
+            mysql -e "DROP DATABASE IF EXIST test"
+            # Reload privilege tables now
+            mysql -e "FLUSH PRIVILEGES;"
         fi
     fi
 }
