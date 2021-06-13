@@ -19,18 +19,16 @@ fi
 
 AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
 
-VERSION=""
-
-read -s "PHP Version: " VERSION
-
-while [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]] do
+while read -p "PHP Version: " VERSION && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
+do
     echo "Your input version($VERSION) not supported, please enter another one."
-    read -s "PHP Version: " VERSION
+    echo "Support versions are (${AVAILABLE_VERSION[*]})"
 done
 
 if ! hash nginx; then
     echo "Detected nginx not yet installed, will install nginx first."
     if hash apt; then
+        apt update
         apt -y install nginx
     elif hash dnf; then
         dnf -y install nginx
@@ -59,14 +57,14 @@ function build_extension_string(){
     echo concated_string
 }
 
-if [ LINUX_OS -eq "Ubuntu" ];
+if [[ LINUX_OS == "Ubuntu" ]];
 then
     apt -y install software-properties-common
     add-apt-repository ppa:ondrej/php
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
     #update-alternatives --set php /usr/bin/php${VERSION}
-elif [ LINUX_OS -eq "Debian" ];
+elif [[ LINUX_OS == "Debian" ]];
 then
     apt -y install lsb-release apt-transport-https ca-certificates
     wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -74,7 +72,7 @@ then
     apt update
     eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
     #update-alternatives --set php /usr/bin/php${VERSION}
-elif [ LINUX_OS -eq "CentOS" ];
+elif [[ LINUX_OS == "CentOS" ]];
 then
     yum -y install epel-release
     yum -y install https://rpms.remirepo.net/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
