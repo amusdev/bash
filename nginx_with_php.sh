@@ -79,7 +79,7 @@ fi
 
 tput reset
 echo "Successful install Nginx and PHP with version: $VERSION"
-if [ LINUX_OS -eq "CentOS" ]; then
+if [[ $LINUX_OS == "CentOS" ]]; then
     VERSION=${VERSION/\./}
 fi
-echo "Tips: you could run `php$VERSION -v` to view installed php."
+echo "Tips: you could run \`php$VERSION -v\` to view installed php."
