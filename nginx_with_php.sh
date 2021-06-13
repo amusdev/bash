@@ -14,8 +14,9 @@ fi
 
 if [[ $LINUX_OS == "CentOS" ]]; then
     if [ $CENTOS_MAJOR_VERSION -lt 5 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
-    echo "This bash only executable on CentOS 5 - 8."
-    exit 0
+        echo "This bash only executable on CentOS 5 - 8."
+        exit 0
+    fi
 fi
 
 if [[ $(/usr/bin/id -u) -ne 0 ]]; then
