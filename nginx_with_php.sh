@@ -26,7 +26,7 @@ fi
 
 AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
 
-while read -p "PHP Version: " VERSION && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
+while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
 do
     echo "Your inputted version($VERSION) is not supported, please enter another one."
     echo "Support versions are (${AVAILABLE_VERSION[*]})"
