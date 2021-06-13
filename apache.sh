@@ -1,24 +1,24 @@
 #!/bin/bash
 
 function install_apache(){
-    if ! hash apache2; then
-        if hash apt; then
+    if ! hash apache2 2>/dev/null; then
+        if hash apt 2>/dev/null; then
             apt update
             apt -y install apache2
-        elif hash dnf; then
+        elif hash dnf 2>/dev/null; then
             dnf -y update httpd
             dnf -y install httpd
-        elif hash yum; then
+        elif hash yum 2>/dev/null; then
             yum -y update httpd
             yum -y install httpd
         fi
     fi
     
     # make sure linux firewall is opened for Apache
-    if hash ufw; then
+    if hash ufw 2>/dev/null; then
         ufw allow 'Apache'
         ufw allow 'Apache Secure'
-    elif hash firewall-cmd; then
+    elif hash firewall-cmd 2>/dev/null; then
         firewall-cmd --permanent --zone=public --add-service=https --add-service=http
         firewall-cmd --reload
     fi
