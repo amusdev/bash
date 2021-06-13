@@ -24,4 +24,7 @@ CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
 install_nginx
 install_php $LINUX_OS $CENTOS_MAJOR_VERSION
+
+tput reset
+print_nginx_finish
 print_php_finish
