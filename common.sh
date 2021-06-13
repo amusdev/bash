@@ -6,22 +6,24 @@
 # 3 = CentOS
 # 4 = others
 function capture_linux_version(){
-    if hash lsb_release; then
-        if lsb_release -d | grep -q "Ubuntu"; then
+    if hash hostnamectl; then
+        if hostnamectl | grep -q "Ubuntu"; then
             echo 1
-        elif lsb_release -d | grep -q "Debian"; then
+        elif hostnamectl | grep -q "Debian"; then
             echo 2
-        elif lsb_release -d | grep -q "CentOS"; then
+        elif hostnamectl | grep -q "CentOS"; then
             echo 3
         else
             echo 4
         fi
     else
-        if 
+        echo 4
     fi
 }
 
-# required CentOS > 5
+# Capture CentOS major version
+# eg. 6.1.1028
+# will capture 6
 function capture_centos_major_verison(){
-    echo $(cat /etc/centos-release | tr -dc '0-9.' | cut -d \. -f1)
+    echo rpm --eval '%{centos}'
 }
