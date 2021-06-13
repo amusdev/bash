@@ -2,6 +2,11 @@
 This repo aims to provide common bash script for using in production.  
 
 ## Usage
+### Apache 2
+execute this command will auto install Apache2 latest vesion
+```bash
+curl -s https://amusdev.github.io/bash/apache.sh | sudo bash
+```
 ### Nginx
 execute this command will auto install Nginx latest vesion
 ```bash
