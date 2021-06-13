@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source <(curl -s https://amusdev.github.io/bash/common.sh)
+source <(curl -s https://amusdev.github.io/bash/php.sh)
+source <(curl -s https://amusdev.github.io/bash/nginx.sh)
 
 # capture_linux_version from common.sh
 LINUX_OS=$(capture_linux_version)
@@ -24,72 +26,14 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     exit 0
 fi
 
-AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
-
-while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
-do
-    echo "Your inputted version($VERSION) is not supported, please enter another one."
-    echo "Support versions are (${AVAILABLE_VERSION[*]})"
-done
-
-if ! hash nginx; then
-    echo "Detected nginx not yet installed, will install nginx first."
-    if hash apt; then
-        apt update
-        apt -y install nginx
-    elif hash dnf; then
-        dnf -y install nginx
-    elif hash yum; then
-        yum -y install nginx
-    fi
-
-    # make sure linux firewall is opened for Nginx
-    if hash ufw; then
-        ufw allow 'Nginx HTTP'
-        ufw allow 'Nginx HTTPS'
-    elif hash firewall-cmd; then
-        firewall-cmd --permanent --zone=public --add-service=https --add-service=http
-        firewall-cmd --reload
-    fi
+install_nginx
+if [ $? -ne 0 ]; then
+    echo "Sorry, we have an error during installing nginx."
+    exit 1
 fi
-
-# support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
-EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
-
-function build_extension_string(){
-    old_ifs=$IFS
-    IFS=" "
-    PREFIX_EXTENDSIONS=( "${EXTENDSIONS[@]/#/$1}" )
-    echo "${PREFIX_EXTENDSIONS[*]}"
-    IFS=$old_ifs
-}
-
-if [[ $LINUX_OS == "Ubuntu" ]];
-then
-    apt -y install software-properties-common
-    add-apt-repository -y ppa:ondrej/php
-    apt update
-    eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-    #update-alternatives --set php /usr/bin/php${VERSION}
-elif [[ $LINUX_OS == "Debian" ]];
-then
-    apt -y install lsb-release apt-transport-https ca-certificates
-    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-    apt update
-    eval "apt -y install openssl php${VERSION} $(build_extension_string "php${VERSION}-")"
-    #update-alternatives --set php /usr/bin/php${VERSION}
-elif [[ $LINUX_OS == "CentOS" ]];
-then
-    yum -y install epel-release
-    yum -y install https://rpms.remirepo.net/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
-    yum makecache
-    eval "yum -y install openssl php${VERSION/\./} $(build_extension_string "php${VERSION/\./}-php-")"
+install_php
+if [ $? -ne 0 ]; then
+    echo "Sorry, we have an error during installing php."
+    exit 1
 fi
-
-tput reset
-echo "Successful install Nginx and PHP with version: $VERSION"
-if [[ $LINUX_OS == "CentOS" ]]; then
-    VERSION=${VERSION/\./}
-fi
-echo "Tips: you could run \`php$VERSION -v\` to view installed php."
+print_finish
