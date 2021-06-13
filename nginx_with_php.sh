@@ -50,8 +50,11 @@ fi
 EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
 
 function build_extension_string(){
+    old_ifs=$IFS
+    IFS=" "
     PREFIX_EXTENDSIONS=( "${EXTENDSIONS[@]/#/$1}" )
     echo "${PREFIX_EXTENDSIONS[*]}"
+    IFS=$old_ifs
 }
 
 if [[ $LINUX_OS == "Ubuntu" ]];
