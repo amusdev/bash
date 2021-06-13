@@ -3,7 +3,7 @@ This repo aims to provide common bash script for using in production.
 
 ## Installation
 ```bash
-curl -s https://amusdev.github.io/bash/<any bash script under usage> | bash
+curl -s https://amusdev.github.io/bash/<any bash script under usage> | sudo bash
 ```
 
 ## Usage
