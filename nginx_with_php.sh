@@ -1,11 +1,13 @@
 #!/bin/bash
 
-source ./common
+source ./common.sh
 
 # capture_linux_version from common.sh
-LINUX_VERSION=$(capture_linux_version)
+LINUX_OS=$(capture_linux_version)
+# capture_centos_major_verison from common.sh
+CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-if [ LINUX_VERSION -eq 4 ]; then
+if [[ LINUX_OS == "Others" ]]; then
     echo "This bash only executable on Ubuntu, Debian, CentOS."
     exit 0
 fi
@@ -37,7 +39,7 @@ if ! hash nginx; then
     fi
 fi
 
-if [ LINUX_VERSION -eq 1 ]; then
+if [ LINUX_OS -eq "Ubuntu" ]; then
     # install repository
     apt -y install software-properties-common
     add-apt-repository ppa:ondrej/php
@@ -46,7 +48,7 @@ if [ LINUX_VERSION -eq 1 ]; then
     apt -y install openssl php${VERSION} php${VERSION}-fpm php${VERSION}-bcmath php${VERSION}-common php${VERSION}-curl\
         php${VERSION}-json php${VERSION}-mysql php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip php${VERSION}-gd\
         php${VERSION}-soap php${VERSION}-ssh2 php${VERSION}-tokenizer php${VERSION}-intl php${VERSION}-xsl php${VERSION}-mcrypt
-elif [ LINUX_VERSION -eq 2 ]; then
+elif [ LINUX_OS -eq "Debian" ]; then
     # install repository
     apt -y install lsb-release apt-transport-https ca-certificates
     wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -56,8 +58,12 @@ elif [ LINUX_VERSION -eq 2 ]; then
     apt -y install php${VERSION} php${VERSION}-fpm php${VERSION}-bcmath php${VERSION}-common php${VERSION}-curl\
         php${VERSION}-json php${VERSION}-mysql php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip php${VERSION}-gd\
         php${VERSION}-soap php${VERSION}-ssh2 php${VERSION}-tokenizer php${VERSION}-intl php${VERSION}-xsl php${VERSION}-mcrypt
-elif [ LINUX_VERSION -eq 3]; then
-    # TODO
+elif [ LINUX_OS -eq "CentOS" ]; then
+    # install repository
+    yum -y install epel-release
+    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-$CENTOS_MAJOR_VERSION.rpm
+    # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
+    yum --enablerepo=remi-php${VERSION/\./} install php php-fpm
 fi
 
 tput reset
