@@ -7,8 +7,14 @@ LINUX_OS=$(capture_linux_version)
 # capture_centos_major_verison from common.sh
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-if [[ LINUX_OS == "Others" ]]; then
+if [[ $LINUX_OS == "Others" ]]; then
     echo "This bash only executable on Ubuntu, Debian, CentOS."
+    exit 0
+fi
+
+if [[ $LINUX_OS == "CentOS" ]]; then
+    if [ $CENTOS_MAJOR_VERSION -lt 5 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
+    echo "This bash only executable on CentOS 5 - 8."
     exit 0
 fi
 
@@ -21,7 +27,7 @@ AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
 
 while read -p "PHP Version: " VERSION && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
 do
-    echo "Your input version($VERSION) not supported, please enter another one."
+    echo "Your inputted version($VERSION) is not supported, please enter another one."
     echo "Support versions are (${AVAILABLE_VERSION[*]})"
 done
 
