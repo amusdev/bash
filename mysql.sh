@@ -61,7 +61,7 @@ function install_mysql(){
                 fi
             else
                 if [[ $VERSION == "8.0" ]]; then
-                    yum -y install https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+                    yum -y install https://repo.mysql.com/mysql80-community-release-el${CENTOS_MAJOR_VERSION}-3.noarch.rpm
                     yum -y install mysql-community-server
                 elif [[ $VERISON == "5.7" ]]; then
                     yum localinstall https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
@@ -105,6 +105,7 @@ function install_mysql(){
         echo "This bash required root permission."
         exit 1
     fi
+    # todo: centos min 6
 
     # capture_linux_version from common.sh
     LINUX_OS=$(capture_linux_version)
