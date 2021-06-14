@@ -86,15 +86,15 @@ function install_mysql(){
         if [ $executed -eq 1 ]; then
             # mysql_secure_installation
             # New password
-            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
             # Remove anonymous users
-            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP USER ''@'localhost'"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP USER ''@'localhost'"
             # Because our hostname varies we'll use some Bash magic here.
-            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP USER ''@'$(hostname)'"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP USER ''@'$(hostname)'"
             # Remove test database and access to it
-            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP DATABASE IF EXIST test"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP DATABASE IF EXIST test"
             # Reload privilege tables now
-            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "FLUSH PRIVILEGES;"
         fi
     fi
 }
