@@ -1,6 +1,11 @@
 # Bash
 This repo aims to provide common bash script for using in production.  
 
+# Support Environments
+Ubuntu 14.04 <= v <= 20.04  
+Debian 8 <= v <= 10  
+CentOS 5 <= v <= 8
+
 ## Usage
 ### Apache 2
 execute this command will auto install Apache2 latest vesion
