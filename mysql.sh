@@ -106,7 +106,9 @@ function install_mysql(){
             # mysql_secure_installation
             MYSQL_SECURE_INSTALLATION_SCRIPT=";
             # Turn off validate password
-            SET GLOBAL validate_password_policy = 0;
+            IF (SELECT COUNT(*) FROM IMFORMATION_SCHEMA.PLUGINS WHERE PLUGIN_NAME = 'validate_password' AND PLUGIN_STATUS = 'ACTIVE') > 0 THEN
+                SET GLOBAL validate_password_policy = 0;
+            END IF;
             # New password
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD';
             # Remove anonymous users
