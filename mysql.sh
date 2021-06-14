@@ -106,7 +106,6 @@ function install_mysql(){
             # mysql_secure_installation
             MYSQL_SECURE_INSTALLATION_SCRIPT=";
             # Turn off validate password
-            SET GLOBAL validate_password.policy = 0;
             SET GLOBAL validate_password_policy = 0;
             # New password
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD';
