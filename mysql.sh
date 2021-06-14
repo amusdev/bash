@@ -1,6 +1,9 @@
 #!/bin/bash
 
+# used for installation
 DEFAULT_PASSWORD="rootroot"
+# used for login after installation
+PRESET_PASSWORD="testtest"
 
 MYSQL57_FALLBACK_REPO="[mysql57-community]
 name=MySQL 5.7 Community Server
@@ -53,6 +56,7 @@ function install_mysql(){
             DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
+            #rm -f ./mysql_config.deb
             executed=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
             if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
@@ -86,15 +90,15 @@ function install_mysql(){
         if [ $executed -eq 1 ]; then
             # mysql_secure_installation
             # New password
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD'; FLUSH PRIVILEGES;"
             # Remove anonymous users
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP USER ''@'localhost'"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP USER ''@'localhost'"
             # Because our hostname varies we'll use some Bash magic here.
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP USER ''@'$(hostname)'"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP USER ''@'$(hostname)'"
             # Remove test database and access to it
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "DROP DATABASE IF EXIST test"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP DATABASE IF EXIST test"
             # Reload privilege tables now
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "FLUSH PRIVILEGES;"
         fi
     fi
 }
