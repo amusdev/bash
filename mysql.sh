@@ -63,7 +63,7 @@ function install_mysql(){
                 if [[ $VERSION == "8.0" ]]; then
                     dnf -y install mysql-server
                     DEFAULT_PASSWORD=""
-                elif [[ $VERISON == "5.7" ]]; then
+                elif [[ $VERSION == "5.7" ]]; then
                     dnf -y remove @mysql
                     dnf module reset mysql && dnf module disable mysql
                     $MYSQL57_FALLBACK_REPO >> /etc/yum.repos.d/mysql-community.repo
@@ -81,7 +81,7 @@ function install_mysql(){
                 if [[ $VERSION == "8.0" ]]; then
                     yum -y install https://repo.mysql.com/mysql80-community-release-el${CENTOS_MAJOR_VERSION}-3.noarch.rpm
                     yum -y install mysql-community-server
-                elif [[ $VERISON == "5.7" ]]; then
+                elif [[ $VERSION == "5.7" ]]; then
                     yum localinstall https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
                     yum -y install mysql-community-server
                 fi
