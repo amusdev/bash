@@ -61,19 +61,22 @@ function install_mysql(){
         elif [[ $LINUX_OS == "CentOS" ]]; then
             if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
                 if [[ $VERSION == "8.0" ]]; then
-                    yum -y install mysql-server
+                    dnf -y install mysql-server
                     DEFAULT_PASSWORD=""
                 elif [[ $VERISON == "5.7" ]]; then
-                    yum -y remove @mysql
-                    yum module reset mysql && yum module disable mysql
+                    dnf -y remove @mysql
+                    dnf module reset mysql && dnf module disable mysql
                     $MYSQL57_FALLBACK_REPO >> /etc/yum.repos.d/mysql-community.repo
                     # make sure other verison repo is disabled
-                    yum config-manager --disable mysql80-community
-                    yum config-manager --enable mysql57-community
-                    yum -y install mysql-community-server
+                    dnf config-manager --disable mysql80-community
+                    dnf config-manager --enable mysql57-community
+                    dnf -y install mysql-community-server
                     generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
                     DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
                 fi
+                systemctl start mysqld.service
+                # start the service on server boots up
+                systemctl enable mysqld
             else
                 if [[ $VERSION == "8.0" ]]; then
                     yum -y install https://repo.mysql.com/mysql80-community-release-el${CENTOS_MAJOR_VERSION}-3.noarch.rpm
@@ -91,15 +94,20 @@ function install_mysql(){
         fi
         
         if [ $executed -eq 1 ]; then
+            if [[ $DEFAULT_PASSWORD == "" ]]; then
+                P_COMMAND=""
+            else
+                P_COMMAND="-p$DEFAULT_PASSWORD"
+            fi
             # mysql_secure_installation
             # New password
-            mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD'; FLUSH PRIVILEGES;"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD'; FLUSH PRIVILEGES;"
             # Remove anonymous users
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DELETE FROM mysql.user WHERE User = ""; DELETE FROM mysql.user WHERE Host NOT IN ('localhost', '127.0.0.1', '::1');"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "DELETE FROM mysql.user WHERE User = ""; DELETE FROM mysql.user WHERE Host NOT IN ('localhost', '127.0.0.1', '::1');"
             # Remove test database and access to it
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP DATABASE IF EXISTS test;"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "DROP DATABASE IF EXISTS test;"
             # Reload privilege tables now
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "FLUSH PRIVILEGES;"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "FLUSH PRIVILEGES;"
         fi
     fi
 }
