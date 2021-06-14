@@ -72,7 +72,7 @@ function install_mysql(){
                     dnf config-manager --enable mysql57-community
                     dnf -y install mysql-community-server
                     generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
-                    DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
+                    DEFAULT_PASSWORD=$(echo ${generated_pwd##*:} | xargs)
                 fi
                 systemctl start mysqld.service
                 # start the service on server boots up
