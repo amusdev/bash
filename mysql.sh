@@ -92,11 +92,9 @@ function install_mysql(){
             # New password
             mysql -h "localhost" -u "root" -p$DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD'; FLUSH PRIVILEGES;"
             # Remove anonymous users
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP USER ''@'localhost'"
-            # Because our hostname varies we'll use some Bash magic here.
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP USER ''@'$(hostname)'"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DELETE FROM mysql.user WHERE User = "" OR Host NOT IN ('localhost', '127.0.0.1', '::1');"
             # Remove test database and access to it
-            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP DATABASE IF EXIST test"
+            mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "DROP DATABASE IF EXISTS test;"
             # Reload privilege tables now
             mysql -h "localhost" -u "root" -p$PRESET_PASSWORD -e "FLUSH PRIVILEGES;"
         fi
