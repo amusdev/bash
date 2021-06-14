@@ -2,8 +2,30 @@
 
 DEFAULT_PASSWORD="rootroot"
 
+MYSQL57_FALLBACK_REPO="[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/\$basearch/
+enabled=1
+gpgcheck=0
+
+[mysql-connectors-community]
+name=MySQL Connectors Community
+baseurl=http://repo.mysql.com/yum/mysql-connectors-community/el/7/\$basearch/
+enabled=1
+gpgcheck=0
+
+[mysql-tools-community]
+name=MySQL Tools Community
+baseurl=http://repo.mysql.com/yum/mysql-tools-community/el/7/\$basearch/
+enabled=1
+gpgcheck=0"
+
+# --------------------------------------------------------
+# install_mysql(string LINUX_OS, int CENTOS_MAJOR_VERSION)
+# --------------------------------------------------------
 function install_mysql(){
     LINUX_OS=$1
+    CENTOS_MAJOR_VERSION=$2
     
     AVAILABLE_VERSION=("5.7" "8.0")
 
@@ -25,12 +47,29 @@ function install_mysql(){
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
             executed=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
-            yum -y module disable mysql
-            if [[ $VERSION == "8.0" ]]; then
-                yum -y install https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
-            elif [[ $VERISON == "5.7" ]]; then
-                yum -y install https://repo.mysql.com/mysql57-community-release-el7-9.noarch.rpm
+            if [ CENTOS_MAJOR_VERSION -ge 8 ]; then
+                if [[ $VERSION == "8.0" ]]; then
+                    yum -y install mysql-server
+                elif [[ $VERISON == "5.7" ]]; then
+                    yum -y remove @mysql
+                    yum module reset mysql && yum module disable mysql
+                    $MYSQL57_FALLBACK_REPO >> /etc/yum.repos.d/mysql-community.repo
+                    # make sure other verison repo is disabled
+                    yum config-manager --disable mysql80-community
+                    yum config-manager --enable mysql57-community
+                    yum -y install mysql-community-server
+                fi
+            else
+                if [[ $VERSION == "8.0" ]]; then
+                    yum -y install https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+                    yum -y install mysql-community-server
+                elif [[ $VERISON == "5.7" ]]; then
+                    yum localinstall https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
+                    yum -y install mysql-community-server
+                fi
             fi
+            generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
+            DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
             sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
             yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
             executed=1
@@ -39,15 +78,15 @@ function install_mysql(){
         if [ $executed -eq 1 ]; then
             # mysql_secure_installation
             # New password
-            mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
             # Remove anonymous users
-            mysql -e "DROP USER ''@'localhost'"
+            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP USER ''@'localhost'"
             # Because our hostname varies we'll use some Bash magic here.
-            mysql -e "DROP USER ''@'$(hostname)'"
+            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP USER ''@'$(hostname)'"
             # Remove test database and access to it
-            mysql -e "DROP DATABASE IF EXIST test"
+            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "DROP DATABASE IF EXIST test"
             # Reload privilege tables now
-            mysql -e "FLUSH PRIVILEGES;"
+            mysql -h "localhost" -u "root" -p $DEFAULT_PASSWORD -e "FLUSH PRIVILEGES;"
         fi
     fi
 }
@@ -72,5 +111,5 @@ function install_mysql(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
  
-    install_mysql $LINUX_OS
+    install_mysql $LINUX_OS $CENTOS_MAJOR_VERSION
  fi
