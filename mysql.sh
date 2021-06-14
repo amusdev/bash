@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DEFAULT_PASSWORD="rootroot"
+
 function install_mysql(){
     LINUX_OS=$1
     
@@ -15,12 +17,15 @@ function install_mysql(){
         executed=0
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
             curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
+            echo "mysql-community-server mysql-community-server/root-pass password ${DEFAULT_PASSWORD}" | debconf-set-selections
+            echo "mysql-community-server mysql-community-server/re-root-pass password ${DEFAULT_PASSWORD}" | debconf-set-selections
             echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
             DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
             executed=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
+            yum -y module disable mysql
             if [[ $VERSION == "8.0" ]]; then
                 yum -y install https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
             elif [[ $VERISON == "5.7" ]]; then
