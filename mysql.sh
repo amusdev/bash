@@ -62,6 +62,9 @@ function install_mysql(){
             if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
                 if [[ $VERSION == "8.0" ]]; then
                     dnf -y install mysql-server
+                    systemctl start mysqld.service
+                    # start the service on server boots up
+                    systemctl enable mysqld
                     DEFAULT_PASSWORD=""
                 elif [[ $VERSION == "5.7" ]]; then
                     dnf -y remove @mysql
@@ -71,11 +74,11 @@ function install_mysql(){
                     dnf config-manager --disable mysql80-community
                     dnf config-manager --enable mysql57-community
                     dnf -y install mysql-community-server
+                    systemctl start mysqld.service
+                    # start the service on server boots up
+                    systemctl enable mysqld
                     DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | tail -1 | cut -d '@' -f 2 | cut -d ' ' -f 2)
                 fi
-                systemctl start mysqld.service
-                # start the service on server boots up
-                systemctl enable mysqld
             else
                 if [[ $VERSION == "8.0" ]]; then
                     yum -y install https://repo.mysql.com/mysql80-community-release-el${CENTOS_MAJOR_VERSION}-3.noarch.rpm
@@ -86,6 +89,9 @@ function install_mysql(){
                 fi
                 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
                 yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
+                systemctl start mysqld.service
+                # start the service on server boots up
+                systemctl enable mysqld
                 DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | tail -1 | cut -d '@' -f 2 | cut -d ' ' -f 2)
             fi
             executed=1
