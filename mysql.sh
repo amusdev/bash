@@ -104,14 +104,20 @@ function install_mysql(){
                 P_COMMAND="-p$DEFAULT_PASSWORD"
             fi
             # mysql_secure_installation
+            MYSQL_SECURE_INSTALLATION_SCRIPT=";
+            # Turn off validate password
+            SET GLOBAL validate_password.policy = 0;
+            SET GLOBAL validate_password_policy = 0;
             # New password
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD'; FLUSH PRIVILEGES;"
+            ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD';
             # Remove anonymous users
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "DELETE FROM mysql.user WHERE User = ""; DELETE FROM mysql.user WHERE Host NOT IN ('localhost', '127.0.0.1', '::1');"
+            DELETE FROM mysql.user WHERE User = ""; DELETE FROM mysql.user WHERE Host NOT IN ('localhost', '127.0.0.1', '::1');
             # Remove test database and access to it
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "DROP DATABASE IF EXISTS test;"
+            DROP DATABASE IF EXISTS test;
             # Reload privilege tables now
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND -e "FLUSH PRIVILEGES;"
+            FLUSH PRIVILEGES;"
+
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password e "$MYSQL_SECURE_INSTALLATION_SCRIPT"
         fi
     fi
 }
