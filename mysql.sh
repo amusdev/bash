@@ -29,10 +29,18 @@ function install_mysql(){
     
     AVAILABLE_VERSION=("5.7" "8.0")
 
-    while read -p "MySQL Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
+    while true;
     do
-        echo "Your inputted version($VERSION) is not supported, please enter another one."
-        echo "Support versions are (${AVAILABLE_VERSION[*]})"
+        read -p "MySQL Version: " VERSION < /dev/tty
+        if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
+            echo "Your inputted version($VERSION) is not supported, please enter another one."
+            echo "Support versions are (${AVAILABLE_VERSION[*]})"
+        elif [ CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
+            echo "Your inputted version($VERSION) is not supported, please enter another one."
+            echo "Support versions are (5.7)"
+        else
+            break
+        fi
     done
     
     if ! hash mysqld 2>/dev/null; then
