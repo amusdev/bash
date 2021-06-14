@@ -65,7 +65,7 @@ function install_mysql(){
                     DEFAULT_PASSWORD=""
                 elif [[ $VERSION == "5.7" ]]; then
                     dnf -y remove @mysql
-                    dnf module reset mysql && dnf module disable mysql
+                    dnf -y module reset mysql && dnf -y module disable mysql
                     $MYSQL57_FALLBACK_REPO >> /etc/yum.repos.d/mysql-community.repo
                     # make sure other verison repo is disabled
                     dnf config-manager --disable mysql80-community
