@@ -62,6 +62,7 @@ function install_mysql(){
             if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
                 if [[ $VERSION == "8.0" ]]; then
                     yum -y install mysql-server
+                    DEFAULT_PASSWORD=""
                 elif [[ $VERISON == "5.7" ]]; then
                     yum -y remove @mysql
                     yum module reset mysql && yum module disable mysql
@@ -70,6 +71,8 @@ function install_mysql(){
                     yum config-manager --disable mysql80-community
                     yum config-manager --enable mysql57-community
                     yum -y install mysql-community-server
+                    generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
+                    DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
                 fi
             else
                 if [[ $VERSION == "8.0" ]]; then
@@ -79,11 +82,11 @@ function install_mysql(){
                     yum localinstall https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
                     yum -y install mysql-community-server
                 fi
+                sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+                yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
+                generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
+                DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
             fi
-            generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
-            DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
-            sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
-            yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
             executed=1
         fi
         
