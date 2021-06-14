@@ -71,8 +71,7 @@ function install_mysql(){
                     dnf config-manager --disable mysql80-community
                     dnf config-manager --enable mysql57-community
                     dnf -y install mysql-community-server
-                    generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
-                    DEFAULT_PASSWORD=$(echo ${generated_pwd##*:} | xargs)
+                    DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | tail -1 | cut -d '@' -f 2 | cut -d ' ' -f 2)
                 fi
                 systemctl start mysqld.service
                 # start the service on server boots up
@@ -87,8 +86,7 @@ function install_mysql(){
                 fi
                 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
                 yum -y --enablerepo=mysql${VERSION/\./}-community install mysql-community-server
-                generated_pwd=$(grep 'A temporary password' /var/log/mysqld.log |tail -1)
-                DEFAULT_PASSWORD=$(echo ${generated_pwd#*":"} | xargs)
+                DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | tail -1 | cut -d '@' -f 2 | cut -d ' ' -f 2)
             fi
             executed=1
         fi
