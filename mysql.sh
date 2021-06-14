@@ -35,7 +35,7 @@ function install_mysql(){
         if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
             echo "Your inputted version($VERSION) is not supported, please enter another one."
             echo "Support versions are (${AVAILABLE_VERSION[*]})"
-        elif [ CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
+        elif [ $CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
             echo "Your inputted version($VERSION) is not supported, please enter another one."
             echo "Support versions are (5.7)"
         else
@@ -55,7 +55,7 @@ function install_mysql(){
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
             executed=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
-            if [ CENTOS_MAJOR_VERSION -ge 8 ]; then
+            if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
                 if [[ $VERSION == "8.0" ]]; then
                     yum -y install mysql-server
                 elif [[ $VERISON == "5.7" ]]; then
