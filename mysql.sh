@@ -117,7 +117,7 @@ function install_mysql(){
             # Reload privilege tables now
             FLUSH PRIVILEGES;"
 
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password e "$MYSQL_SECURE_INSTALLATION_SCRIPT"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "$MYSQL_SECURE_INSTALLATION_SCRIPT"
         fi
     fi
 }
