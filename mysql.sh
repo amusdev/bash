@@ -108,7 +108,7 @@ function install_mysql(){
             # New password
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD';
             # Remove anonymous users
-            DELETE FROM `mysql`.`user` WHERE `User` = ""; DELETE FROM `mysql`.`user` WHERE `Host` NOT IN ('localhost', '127.0.0.1', '::1');
+            DELETE FROM mysql.user WHERE User = '' OR Host NOT IN ('localhost', '127.0.0.1', '::1');
             # Remove test database and access to it
             DROP DATABASE IF EXISTS `test`;
             # Reload privilege tables
