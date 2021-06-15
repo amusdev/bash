@@ -84,7 +84,7 @@ function install_mysql(){
                     yum -y install https://repo.mysql.com/mysql80-community-release-el${CENTOS_MAJOR_VERSION}-3.noarch.rpm
                     yum -y install mysql-community-server
                 elif [[ $VERSION == "5.7" ]]; then
-                    yum localinstall https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
+                    yum -y install https://dev.mysql.com/get/mysql57-community-release-el${CENTOS_MAJOR_VERSION}-8.noarch.rpm
                     yum -y install mysql-community-server
                 fi
                 sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
