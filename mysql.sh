@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# used for installation
-DEFAULT_PASSWORD="rootroot"
-# used for login after installation
-PRESET_PASSWORD="testtest"
-
 MYSQL57_FALLBACK_REPO="[mysql57-community]
 name=MySQL 5.7 Community Server
 baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/\$basearch/
@@ -23,13 +18,20 @@ baseurl=http://repo.mysql.com/yum/mysql-tools-community/el/7/\$basearch/
 enabled=1
 gpgcheck=0"
 
-# --------------------------------------------------------
-# install_mysql(string LINUX_OS, int CENTOS_MAJOR_VERSION)
-# --------------------------------------------------------
+# --------------------------------------------------------------------------------
+# install_mysql(string LINUX_OS, int CENTOS_MAJOR_VERSION, string PRESET_PASSWORD)
+# --------------------------------------------------------------------------------
 function install_mysql(){
     LINUX_OS=$1
     CENTOS_MAJOR_VERSION=$2
-    
+    # used for installation and fallback
+    DEFAULT_PASSWORD="rootroot"
+    # used for login after installation
+    PRESET_PASSWORD=${3:-"P@ssw0rd"}
+
+    # determine should it start mysql_secure_installation
+    SHOULD_EXECUTE_SECURE_INSTALLATION=0
+
     AVAILABLE_VERSION=("5.7" "8.0")
 
     while true;
@@ -47,7 +49,6 @@ function install_mysql(){
     done
     
     if ! hash mysqld 2>/dev/null; then
-        executed=0
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
             curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
             echo "mysql-community-server mysql-community-server/root-pass password ${DEFAULT_PASSWORD}" | debconf-set-selections
@@ -56,8 +57,8 @@ function install_mysql(){
             DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
-            #rm -f ./mysql_config.deb
-            executed=1
+            rm -f ./mysql_config.deb
+            SHOULD_EXECUTE_SECURE_INSTALLATION=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
             if [ $CENTOS_MAJOR_VERSION -ge 8 ]; then
                 if [[ $VERSION == "8.0" ]]; then
@@ -94,10 +95,10 @@ function install_mysql(){
                 systemctl enable mysqld
                 DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | tail -1 | cut -d '@' -f 2 | cut -d ' ' -f 2)
             fi
-            executed=1
+            SHOULD_EXECUTE_SECURE_INSTALLATION=1
         fi
         
-        if [ $executed -eq 1 ]; then
+        if [ $SHOULD_EXECUTE_SECURE_INSTALLATION -eq 1 ]; then
             if [[ $DEFAULT_PASSWORD == "" ]]; then
                 P_COMMAND=""
             else
@@ -137,7 +138,6 @@ function install_mysql(){
         echo "This bash required root permission."
         exit 1
     fi
-    # todo: centos min 6
 
     # capture_linux_version from common.sh
     LINUX_OS=$(capture_linux_version)
