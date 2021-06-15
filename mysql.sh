@@ -105,19 +105,18 @@ function install_mysql(){
             fi
             # mysql_secure_installation
             MYSQL_SECURE_INSTALLATION_SCRIPT=";
-            # Turn off validate password
-            IF (SELECT COUNT(*) FROM IMFORMATION_SCHEMA.PLUGINS WHERE PLUGIN_NAME = 'validate_password' AND PLUGIN_STATUS = 'ACTIVE') > 0 THEN
-                SET GLOBAL validate_password_policy = 0;
-            END IF;
             # New password
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PRESET_PASSWORD';
             # Remove anonymous users
             DELETE FROM mysql.user WHERE User = ""; DELETE FROM mysql.user WHERE Host NOT IN ('localhost', '127.0.0.1', '::1');
             # Remove test database and access to it
             DROP DATABASE IF EXISTS test;
-            # Reload privilege tables now
+            # Reload privilege tables
             FLUSH PRIVILEGES;"
-
+            
+            # It may throw error if not exists, split out this command
+            # Turn off validate password
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "SET GLOBAL validate_password_policy = 0;"
             mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "$MYSQL_SECURE_INSTALLATION_SCRIPT"
         fi
     fi
