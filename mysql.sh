@@ -116,7 +116,8 @@ function install_mysql(){
             
             # It may throw error if not exists, split out this command
             # Turn off validate password
-            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "SET GLOBAL validate_password_policy = 0;"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "SET GLOBAL validate_password.policy = 0; -- CentOS MySQL 5.7"
+            mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "SET GLOBAL validate_password_policy = 0; -- Others Version"
             mysql -h "127.0.0.1" -u "root" $P_COMMAND --connect-expired-password -e "$MYSQL_SECURE_INSTALLATION_SCRIPT"
         fi
     fi
