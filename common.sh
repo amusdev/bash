@@ -31,6 +31,14 @@ function capture_centos_major_verison(){
     expr ${version:-0}
 }
 
+# Capture Ubuntu major version
+# eg. 20.04
+# will capture 20
+function capture_ubuntu_major_version(){
+    version=$(cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -d '=' -f 2 | cut -d '.' -f 1)
+    expr ${version:-0}
+}
+
 # Environment checking
 function check_env(){
     if [[ $LINUX_OS == "Others" ]]; then
