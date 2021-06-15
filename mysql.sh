@@ -110,7 +110,7 @@ function install_mysql(){
             # Remove anonymous users
             DELETE FROM mysql.user WHERE User = '' OR Host NOT IN ('localhost', '127.0.0.1', '::1');
             # Remove test database and access to it
-            DROP DATABASE IF EXISTS `test`;
+            DROP DATABASE IF EXISTS test;
             # Reload privilege tables
             FLUSH PRIVILEGES;"
             
