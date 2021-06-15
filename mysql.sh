@@ -50,19 +50,35 @@ function install_mysql(){
     
     if ! hash mysqld 2>/dev/null; then
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
-            if [[ $LINUX_OS == "Ubuntu" ]] && [ $UBUNTU_MAJOR_VERSION -ge 20 ]; then
-                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
-                echo "mysql-apt-config mysql-apt-config/repo-codename select bionic" | debconf-set-selections
-            else
-                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb -o ./mysql_config.deb
-            fi
-            echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
             echo "mysql-community-server mysql-community-server/root-pass password ${DEFAULT_PASSWORD}" | debconf-set-selections
             echo "mysql-community-server mysql-community-server/re-root-pass password ${DEFAULT_PASSWORD}" | debconf-set-selections
-            DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
-            apt update
-            DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
-            apt -y install libncurses5 libaio1 libmecab2
+            # Ubuntu 20.x installation package not support MySQL 5.7, fallback to previous version
+            if [[ $LINUX_OS == "Ubuntu" ]] && [ $UBUNTU_MAJOR_VERSION -ge 20 ] && [[ $VERSION == "5.7" ]]; then
+                echo "mysql-apt-config mysql-apt-config/repo-codename select bionic" | debconf-set-selections
+                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb -o ./mysql_config.deb
+                DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
+                apt update
+                DEBIAN_FRONTEND=noninteractive apt -y install -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
+                
+                # prevent package upgrade
+                PACKAGE_VERSION=$(apt-cache policy mysql-server | grep 5.7 | head -1 | xargs | cut -d ' ' -f 1)
+                ehco "Package: mysql-server" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin: version $PACKAGE_VERSION" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin-Priority: 1001" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Package: mysql-client" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin: version $PACKAGE_VERSION" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin-Priority: 1001" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Package: mysql-community-client" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin: version $PACKAGE_VERSION" | tee -a /etc/apt/preferences.d/mysql
+                ehco "Pin-Priority: 1001" | tee -a /etc/apt/preferences.d/mysql
+            else
+                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
+                echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
+                DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
+                apt update
+                DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
+                apt -y install libncurses5 libaio1 libmecab2
+            fi
             rm -f ./mysql_config.deb
             SHOULD_EXECUTE_SECURE_INSTALLATION=1
         elif [[ $LINUX_OS == "CentOS" ]]; then
