@@ -175,6 +175,8 @@ function install_mysql(){
     if [ $? -eq 1 ]; then
         echo "This bash required root permission."
         exit 1
+    elif [ $? -eq 2 ] | [ $? -eq 3 ]; then
+        echo "Not supported OS, Please refer to minimum support OS to learn more."
     fi
 
     # capture_linux_version from common.sh
