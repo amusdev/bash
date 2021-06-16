@@ -20,12 +20,17 @@ gpgcheck=0"
 
 # --------------------------------------------------------------------------------
 # int LINUX_OS=?
+# string UBUNTU_MAJOR_VERSION=?
 # string CENTOS_MAJOR_VERSION=?
 # install_mysql(string PRESET_PASSWORD)
 # --------------------------------------------------------------------------------
 function install_mysql(){
     if [ ! -n "$LINUX_OS" ]; then
         echo "Please provide LINUX_OS variable."
+        return 1
+    fi
+    if [ ! -n "$UBUNTU_MAJOR_VERSION" ]; then
+        echo "Please provide UBUNTU_MAJOR_VERSION variable."
         return 1
     fi
     if [ ! -n "$CENTOS_MAJOR_VERSION" ]; then
@@ -176,6 +181,8 @@ function install_mysql(){
     LINUX_OS=$(capture_linux_version)
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
+    # capture_ubuntu_major_version from common.sh
+    UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
  
     install_mysql
  fi
