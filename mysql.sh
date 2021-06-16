@@ -56,7 +56,7 @@ function install_mysql(){
     AVAILABLE_VERSION=("5.7" "8.0")
     DEFAULT_VERSION="5.7"
 
-    if [ -z "$VERSION" ]; then
+    if [ -z "$VERSION" ] || [[ $VERSION == "" ]]; then
         while true;
         do
             read -p "MySQL Version: " VERSION < /dev/tty
@@ -203,6 +203,8 @@ function install_mysql(){
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
     # capture_ubuntu_major_version from common.sh
     UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
+ 
+    VERSION=""
  
     while getopts "v:p:" args;
     do
