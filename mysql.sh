@@ -55,6 +55,7 @@ function install_mysql(){
             # Ubuntu 20.x installation package not support MySQL 5.7, fallback to previous version
             if [[ $LINUX_OS == "Ubuntu" ]] && [ $UBUNTU_MAJOR_VERSION -ge 20 ] && [[ $VERSION == "5.7" ]]; then
                 echo "mysql-apt-config mysql-apt-config/repo-codename select bionic" | debconf-set-selections
+                echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
                 curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb -o ./mysql_config.deb
                 DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
                 apt update
@@ -72,8 +73,8 @@ function install_mysql(){
                 ehco "Pin: version $PACKAGE_VERSION" | tee -a /etc/apt/preferences.d/mysql
                 ehco "Pin-Priority: 1001" | tee -a /etc/apt/preferences.d/mysql
             else
-                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
                 echo "mysql-apt-config mysql-apt-config/select-server select mysql-${VERSION}" | debconf-set-selections
+                curl -sL https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb -o ./mysql_config.deb
                 DEBIAN_FRONTEND=noninteractive dpkg -i ./mysql_config.deb
                 apt update
                 DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
