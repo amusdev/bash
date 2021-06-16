@@ -41,12 +41,22 @@ function capture_ubuntu_major_version(){
 
 # Environment checking
 function check_env(){
+    LINUX_OS=$(capture_linux_version)
+    CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
+    UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
+    
     if [[ $LINUX_OS == "Others" ]]; then
         return 2
     fi
 
+    if [[ $LINUX_OS == "Ubuntu" ]]; then
+        if [ $UBUNTU_MAJOR_VERSION -lt 16 ] || [ $CENTOS_MAJOR_VERSION -gt 20 ]; then
+            return 3
+        fi
+    fi
+
     if [[ $LINUX_OS == "CentOS" ]]; then
-        if [ $CENTOS_MAJOR_VERSION -lt 5 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
+        if [ $CENTOS_MAJOR_VERSION -lt 6 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
             return 3
         fi
     fi
