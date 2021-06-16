@@ -22,7 +22,7 @@ gpgcheck=0"
 # string LINUX_OS=?
 # int UBUNTU_MAJOR_VERSION=?
 # int CENTOS_MAJOR_VERSION=?
-# install_mysql(string PRESET_PASSWORD)
+# install_mysql(string VERSION, string PRESET_PASSWORD)
 # --------------------------------------------------------------------------------
 function install_mysql(){
     if [ ! -n "$LINUX_OS" ]; then
@@ -40,27 +40,44 @@ function install_mysql(){
     
     # used for installation and fallback
     DEFAULT_PASSWORD="rootroot"
-    # used for login after installation
-    PRESET_PASSWORD=${1:-"P@ssw0rd"}
+    
+    if [ "$#" -eq 1 ]; then
+        VERSION=$1
+        PRESET_PASSWORD="P@ssw0rd"
+    elif [ "$#" -eq 2 ]; then
+        VERSION=$1
+        # used for login after installation
+        PRESET_PASSWORD=${2:-"P@ssw0rd"}
+    fi
 
     # determine should it start mysql_secure_installation
     SHOULD_EXECUTE_SECURE_INSTALLATION=0
 
     AVAILABLE_VERSION=("5.7" "8.0")
+    DEFAULT_VERSION="5.7"
 
-    while true;
-    do
-        read -p "MySQL Version: " VERSION < /dev/tty
+    if [ -z "$VERSION" ]; then
+        while true;
+        do
+            read -p "MySQL Version: " VERSION < /dev/tty
+            if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
+                echo "Your inputted version($VERSION) is not supported, please enter another one."
+                echo "Support versions are (${AVAILABLE_VERSION[*]})"
+            elif [[ $LINUX_OS == "CentOS" ]] && [ $CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
+                echo "Your inputted version($VERSION) is not supported, please enter another one."
+                echo "Support versions are (5.7)"
+            else
+                break
+            fi
+        done
+    else
+        # check version match lists
         if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
-            echo "Your inputted version($VERSION) is not supported, please enter another one."
-            echo "Support versions are (${AVAILABLE_VERSION[*]})"
+            VERSION=$DEFAULT_VERSION
         elif [[ $LINUX_OS == "CentOS" ]] && [ $CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
-            echo "Your inputted version($VERSION) is not supported, please enter another one."
-            echo "Support versions are (5.7)"
-        else
-            break
+            VERSION="5.7"
         fi
-    done
+    fi
     
     if ! hash mysqld 2>/dev/null; then
         if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
@@ -187,5 +204,19 @@ function install_mysql(){
     # capture_ubuntu_major_version from common.sh
     UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
  
-    install_mysql
+    while getopts "v:p:" args;
+    do
+        case "${args}" in
+            v)
+                VERSION=${OPTARG}
+                ;;
+            p)
+                PASSWORD=${OPTARG}
+                ;;
+            *)
+                ;;
+        esac
+    done
+ 
+    install_mysql $VERSION $PASSWORD
  fi
