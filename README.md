@@ -18,14 +18,16 @@ execute this command will auto install Nginx latest vesion
 curl -s https://amusdev.github.io/bash/nginx.sh | sudo bash
 ```
 ### PHP
-execute this command will auto install custom PHP version
+execute this command will auto install custom PHP version  
+available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
 ```bash
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash -s -- -v 7.3
 ```
 ### MySQL
-execute this command will auto install custom MySQL version
+execute this command will auto install custom MySQL version  
+available version: 5.7, 8.0
 ```bash
-curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash
+curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash -s -- -v 5.7 -p "P@ssw0rd"
 ```
 ### Apache + PHP
 execute this command will auto install Apache2 latest vesion and custom PHP version
