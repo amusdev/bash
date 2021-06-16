@@ -23,12 +23,24 @@ function install_php(){
     fi
 
     AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
-
-    while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
-    do
-        echo "Your inputted version($VERSION) is not supported, please enter another one."
-        echo "Support versions are (${AVAILABLE_VERSION[*]})"
-    done
+    DEFAULT_VERSION="7.3"
+    
+    getopts "v:" args
+    if [ -z "$OPTARG" ]; then
+        # parameter not provided
+        while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
+        do
+            echo "Your inputted version($VERSION) is not supported, please enter another one."
+            echo "Support versions are (${AVAILABLE_VERSION[*]})"
+        done
+    else
+        # read from parameters
+        if [[ " ${AVAILABLE_VERSION[@]} " =~ " ${OPTARG} " ]]; then
+            VERSION="$OPTARG"
+        else
+            VERSION=$DEFAULT_VERSION
+        fi
+    fi
 
     # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
     EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
