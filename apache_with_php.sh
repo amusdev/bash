@@ -23,8 +23,8 @@ LINUX_OS=$(capture_linux_version)
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
 install_apache
-install_php $LINUX_OS $CENTOS_MAJOR_VERSION
+install_php
 
 tput reset
-print_apache_finish $LINUX_OS
+print_apache_finish
 print_php_finish
