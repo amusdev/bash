@@ -9,11 +9,22 @@ function build_extension_string(){
 }
 
 # ------------------------------------------------------
-# install_php(string LINUX_OS, int CENTOS_MAJOR_VERSION)
+# int LINUX_OS=?
+# string CENTOS_MAJOR_VERSION=?
 # ------------------------------------------------------
 function install_php(){
-    LINUX_OS=$1
-    CENTOS_MAJOR_VERSION=$2
+    if [ ! -n "$LINUX_OS" ]; then
+        echo "Please provide LINUX_OS variable."
+        return 1
+    fi
+    if [ ! -n "$UBUNTU_MAJOR_VERSION" ]; then
+        echo "Please provide UBUNTU_MAJOR_VERSION variable."
+        return 1
+    fi
+    if [ ! -n "$CENTOS_MAJOR_VERSION" ]; then
+        echo "Please provide CENTOS_MAJOR_VERSION variable."
+        return 1
+    fi
 
     AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
 
@@ -78,7 +89,7 @@ function print_php_finish(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
  
-    install_php $LINUX_OS $CENTOS_MAJOR_VERSION
+    install_php
     tput reset
     print_php_finish
  fi
