@@ -99,7 +99,7 @@ function print_php_finish(){
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
     getopts "v:" args
-    if [ -z "$OPTARG" ]; then
+    if [ ! -z "$OPTARG" ]; then
         install_php "$OPTARG"
     else
         install_php
