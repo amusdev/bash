@@ -23,7 +23,7 @@ LINUX_OS=$(capture_linux_version)
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
 install_nginx
-install_php $LINUX_OS $CENTOS_MAJOR_VERSION
+install_php
 
 tput reset
 print_nginx_finish
