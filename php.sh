@@ -9,8 +9,8 @@ function build_extension_string(){
 }
 
 # ------------------------------------------------------
-# int LINUX_OS=?
-# string CENTOS_MAJOR_VERSION=?
+# string LINUX_OS=?
+# int CENTOS_MAJOR_VERSION=?
 # ------------------------------------------------------
 function install_php(){
     if [ ! -n "$LINUX_OS" ]; then
