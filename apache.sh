@@ -28,7 +28,7 @@ function install_apache(){
 }
 
 # ------------------------------------
-# int LINUX_OS=?
+# string LINUX_OS=?
 # ------------------------------------
 function print_apache_finish(){
     if [ ! -n "$LINUX_OS" ]; then
