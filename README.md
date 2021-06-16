@@ -22,6 +22,11 @@ execute this command will auto install custom PHP version
 ```bash
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash
 ```
+### MySQL
+execute this command will auto install custom MySQL version
+```bash
+curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash
+```
 ### Apache + PHP
 execute this command will auto install Apache2 latest vesion and custom PHP version
 ```bash
