@@ -17,10 +17,6 @@ function install_php(){
         echo "Please provide LINUX_OS variable."
         return 1
     fi
-    if [ ! -n "$UBUNTU_MAJOR_VERSION" ]; then
-        echo "Please provide UBUNTU_MAJOR_VERSION variable."
-        return 1
-    fi
     if [ ! -n "$CENTOS_MAJOR_VERSION" ]; then
         echo "Please provide CENTOS_MAJOR_VERSION variable."
         return 1
