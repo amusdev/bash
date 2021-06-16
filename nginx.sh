@@ -39,6 +39,17 @@ function print_nginx_finish(){
  [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null)) && IS_SOURCED_BASH=1 || IS_SOURCED_BASH=0
  
  if [ $IS_SOURCED_BASH -eq 0 ]; then
+    source <(curl -s https://amusdev.github.io/bash/common.sh)
+
+    # check_env from common.sh
+    check_env
+    if [ $? -eq 1 ]; then
+        echo "This bash required root permission."
+        exit 1
+    elif [ $? -eq 2 ] | [ $? -eq 3 ]; then
+        echo "Not supported OS, Please refer to minimum support OS to learn more."
+    fi
+
     install_nginx
     print_nginx_finish
  fi
