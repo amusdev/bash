@@ -11,6 +11,7 @@ function build_extension_string(){
 # ------------------------------------------------------
 # string LINUX_OS=?
 # int CENTOS_MAJOR_VERSION=?
+# install_php(string VERSION)
 # ------------------------------------------------------
 function install_php(){
     if [ ! -n "$LINUX_OS" ]; then
@@ -22,11 +23,11 @@ function install_php(){
         return 1
     fi
 
+    VERSION=$1
     AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
     DEFAULT_VERSION="7.3"
     
-    getopts "v:" args
-    if [ -z "$OPTARG" ]; then
+    if [ -z "$VERSION" ]; then
         # parameter not provided
         while read -p "PHP Version: " VERSION < /dev/tty && [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]];
         do
@@ -34,10 +35,8 @@ function install_php(){
             echo "Support versions are (${AVAILABLE_VERSION[*]})"
         done
     else
-        # read from parameters
-        if [[ " ${AVAILABLE_VERSION[@]} " =~ " ${OPTARG} " ]]; then
-            VERSION="$OPTARG"
-        else
+        # check version match lists
+        if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
             VERSION=$DEFAULT_VERSION
         fi
     fi
@@ -98,8 +97,13 @@ function print_php_finish(){
     LINUX_OS=$(capture_linux_version)
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
- 
-    install_php
+
+    getopts "v:" args
+    if [ -z "$OPTARG" ]; then
+        install_php "$OPTARG"
+    else
+        install_php
+    fi
     tput reset
     print_php_finish
  fi
