@@ -19,15 +19,24 @@ enabled=1
 gpgcheck=0"
 
 # --------------------------------------------------------------------------------
-# install_mysql(string LINUX_OS, int CENTOS_MAJOR_VERSION, string PRESET_PASSWORD)
+# int LINUX_OS=?
+# string CENTOS_MAJOR_VERSION=?
+# install_mysql(string PRESET_PASSWORD)
 # --------------------------------------------------------------------------------
 function install_mysql(){
-    LINUX_OS=$1
-    CENTOS_MAJOR_VERSION=$2
+    if [ ! -n "$LINUX_OS" ]; then
+        echo "Please provide LINUX_OS variable."
+        return 1
+    fi
+    if [ ! -n "$CENTOS_MAJOR_VERSION" ]; then
+        echo "Please provide CENTOS_MAJOR_VERSION variable."
+        return 1
+    fi
+    
     # used for installation and fallback
     DEFAULT_PASSWORD="rootroot"
     # used for login after installation
-    PRESET_PASSWORD=${3:-"P@ssw0rd"}
+    PRESET_PASSWORD=${1:-"P@ssw0rd"}
 
     # determine should it start mysql_secure_installation
     SHOULD_EXECUTE_SECURE_INSTALLATION=0
@@ -168,5 +177,5 @@ function install_mysql(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
  
-    install_mysql $LINUX_OS $CENTOS_MAJOR_VERSION
+    install_mysql
  fi
