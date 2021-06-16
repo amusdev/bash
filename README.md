@@ -20,7 +20,7 @@ curl -s https://amusdev.github.io/bash/nginx.sh | sudo bash
 ### PHP
 execute this command will auto install custom PHP version
 ```bash
-curl -s https://amusdev.github.io/bash/php.sh | sudo bash -v 7.3
+curl -s https://amusdev.github.io/bash/php.sh | sudo bash -s -- -v 7.3
 ```
 ### MySQL
 execute this command will auto install custom MySQL version
