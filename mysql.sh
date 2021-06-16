@@ -19,9 +19,9 @@ enabled=1
 gpgcheck=0"
 
 # --------------------------------------------------------------------------------
-# int LINUX_OS=?
-# string UBUNTU_MAJOR_VERSION=?
-# string CENTOS_MAJOR_VERSION=?
+# string LINUX_OS=?
+# int UBUNTU_MAJOR_VERSION=?
+# int CENTOS_MAJOR_VERSION=?
 # install_mysql(string PRESET_PASSWORD)
 # --------------------------------------------------------------------------------
 function install_mysql(){
