@@ -25,7 +25,6 @@ function install_php(){
 
     VERSION=$1
     AVAILABLE_VERSION=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
-    DEFAULT_VERSION="7.3"
     
     if [ -z "$VERSION" ]; then
         # parameter not provided
@@ -37,7 +36,8 @@ function install_php(){
     else
         # check version match lists
         if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
-            VERSION=$DEFAULT_VERSION
+            echo "Your inputted version($VERSION) is not supported."
+            exit 1
         fi
     fi
 
