@@ -55,7 +55,7 @@ function install_mysql(){
 
     AVAILABLE_VERSION=("5.7" "8.0")
 
-    if [ -z "$VERSION" ] || [[ $VERSION == "" ]]; then
+    if [ -z "$VERSION" ]; then
         while true;
         do
             read -p "MySQL Version: " VERSION < /dev/tty
