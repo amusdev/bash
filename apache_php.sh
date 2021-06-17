@@ -22,8 +22,11 @@ LINUX_OS=$(capture_linux_version)
 # capture_centos_major_verison from common.sh
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
+getopts "p:" args
+
 install_apache
-install_php
+# OPTARG contains v argurement
+install_php "$OPTARG"
 
 tput reset
 print_apache_finish
