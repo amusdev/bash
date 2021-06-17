@@ -44,5 +44,5 @@ curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash -s -- -p 7.3
 ### Nginx + PHP + MySQL
 execute this command will auto install Nginx latest vesion and custom PHP version and custom MySQL version
 ```bash
-curl -s https://amusdev.github.io/bash/nginx_php_mysql.sh | sudo bash
+curl -s https://amusdev.github.io/bash/nginx_php_mysql.sh | sudo bash -s -- -p 7.3 -m 5.7 -t "P@ssw0rd"
 ```
