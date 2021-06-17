@@ -54,7 +54,6 @@ function install_mysql(){
     SHOULD_EXECUTE_SECURE_INSTALLATION=0
 
     AVAILABLE_VERSION=("5.7" "8.0")
-    DEFAULT_VERSION="5.7"
 
     if [ -z "$VERSION" ] || [[ $VERSION == "" ]]; then
         while true;
@@ -73,7 +72,8 @@ function install_mysql(){
     else
         # check version match lists
         if [[ ! " ${AVAILABLE_VERSION[@]} " =~ " ${VERSION} " ]]; then
-            VERSION=$DEFAULT_VERSION
+            echo "Your inputted version($VERSION) is not supported."
+            exit 1
         elif [[ $LINUX_OS == "CentOS" ]] && [ $CENTOS_MAJOR_VERSION -lt 6 ] && [[ $VERSION == "8.0" ]]; then
             VERSION="5.7"
         fi
