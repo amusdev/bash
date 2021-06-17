@@ -30,7 +30,7 @@ function install_nginx(){
 
 function print_nginx_finish(){
     echo "Successful install Nginx."
-    echo "Tips: you could run \`systemctl nginx status\` to view Nginx status."
+    echo "Tips: you could run \`systemctl status nginx\` to view Nginx status."
 }
 
 ([[ -n $ZSH_EVAL_CONTEXT && $ZSH_EVAL_CONTEXT =~ :file$ ]] || 
