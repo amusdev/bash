@@ -21,9 +21,29 @@ UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
 # capture_centos_major_verison from common.sh
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
+MYSQL_VERSION=""
+PHP_VERSION=""
+
+while getopts "m:p:t:" args;
+do
+    case "${args}" in
+        p)
+            PHP_VERSION=${OPTARG}
+            ;;
+        m)
+            MYSQL_VERSION=${OPTARG}
+            ;;
+        t)
+            MYSQL_PASSWORD=${OPTARG}
+            ;;
+        *)
+        ;;
+    esac
+done
+
 install_nginx
-install_mysql
-install_php
+install_mysql $MYSQL_VERSION $MYSQL_PASSWORD
+install_php $PHP_VERSION
 
 tput reset
 print_nginx_finish
