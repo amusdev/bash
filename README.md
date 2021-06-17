@@ -31,11 +31,13 @@ curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash -s -- -v 5.7 -p "P@s
 ```
 ### Apache + PHP
 execute this command will auto install Apache2 latest vesion and custom PHP version
+available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
 ```bash
 curl -s https://amusdev.github.io/bash/apache_php.sh | sudo bash -s -- -p 7.3
 ```
 ### Nginx + PHP
 execute this command will auto install Nginx latest vesion and custom PHP version
+available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
 ```bash
 curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash -s -- -p 7.3
 ```
