@@ -44,7 +44,7 @@ curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash -s -- -p 7.3
 ### Nginx + PHP + MySQL
 execute this command will auto install Nginx latest vesion and custom PHP version and custom MySQL version  
 PHP available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0  
-MySQL available version: 5.7, 8.0
+MySQL available version: 5.7, 8.0  
 t = MySQL Password
 ```bash
 curl -s https://amusdev.github.io/bash/nginx_php_mysql.sh | sudo bash -s -- -p 7.3 -m 5.7 -t "P@ssw0rd"
