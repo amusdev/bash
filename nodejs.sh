@@ -40,7 +40,6 @@ function install_nodejs(){
             echo "Your inputted version($NPM_VERSION) is not supported, please enter another one."
             echo "Support versions are (${NPM_AVAILABLE_VERSION[*]})"
         done
-    fi
     else
         # check version match lists
         if [[ ! " ${NPM_AVAILABLE_VERSION[@]} " =~ " ${NPM_VERSION} " ]]; then
