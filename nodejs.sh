@@ -48,8 +48,7 @@ function install_nodejs(){
         fi
     fi
 
-    if [[ $LINUX_OS == "Ubuntu" ]] | [[ $LINUX_OS == "Debian" ]];
-    then;
+    if [[ $LINUX_OS == "Ubuntu" ]] | [[ $LINUX_OS == "Debian" ]]; then
         curl -sL https://deb.nodesource.com/setup_${NODEJS_VERSION}.x | sudo -E bash -
         apt-get install -y nodejs
     else
