@@ -10,7 +10,7 @@ fi
 # install_nodejs(string NODEJS_VERSION, string NPM_VERSION)
 # ------------------------------------------------------
 function install_nodejs(){
-    apt-get install apt-transport-https curl software-properties-common
+    apt-get install -y apt-transport-https curl software-properties-common
 
     NODEJS_AVAILABLE_VERSION=("10" "11" "12" "13" "14" "15" "16")
     NPM_AVAILABLE_VERSION=("5" "6" "7")
@@ -48,7 +48,7 @@ function install_nodejs(){
         fi
     fi
 
-    if [[ $LINUX_OS == "Ubuntu" ]] | [[ $LINUX_OS == "Debian" ]]; then
+    if [[ $LINUX_OS == "Ubuntu" ]] || [[ $LINUX_OS == "Debian" ]]; then
         curl -sL https://deb.nodesource.com/setup_${NODEJS_VERSION}.x | sudo -E bash -
         apt-get install -y nodejs
     else
