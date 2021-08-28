@@ -97,6 +97,7 @@ function print_nodejs_finish(){
             n)
                 NPM_VERSION=${OPTARG}
                 ;;
+            *)
             ;;
         esac
     done
