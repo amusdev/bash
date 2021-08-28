@@ -1,7 +1,7 @@
 # Bash
 This repo aims to provide common bash script for using in production.  
 
-# Support Environments
+## Support Environments
 Ubuntu 16.04 <= v <= 20.04  
 Debian 8 <= v <= 10  
 CentOS 6 <= v <= 8
