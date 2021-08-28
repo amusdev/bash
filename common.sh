@@ -6,7 +6,26 @@
 # 3 = CentOS
 # 4 = others
 function capture_linux_version(){
-    if hash hostnamectl 2>/dev/null; then
+    # install required extension `lsb_release`
+    if ! hash lsb_release 2>/dev/null; then
+        if hash yum 2>/dev/null; then
+            yum install -y redhat-lsb-core
+        elif hash apt-get 2>/dev/null; then
+            apt-get update && apt-get install -y lsb-release && apt-get clean all
+        fi
+    fi
+    # start checking os version
+    if hash lsb_release 2>/dev/null; then
+        if lsb_release -si | grep -q "Ubuntu"; then
+            echo "Ubuntu"
+        elif lsb_release -si | grep -q "Debian"; then
+            echo "Debian"
+        elif lsb_release -si | grep -q "CentOS"; then
+            echo "CentOS"
+        else
+            echo "Others"
+        fi
+    elif hash hostnamectl 2>/dev/null; then
         if hostnamectl | grep -q "Ubuntu"; then
             echo "Ubuntu"
         elif hostnamectl | grep -q "Debian"; then
