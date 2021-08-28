@@ -86,8 +86,6 @@ function print_nodejs_finish(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-    NODEJS_VERSION="14"
-    NPM_VERSION="7"
     while getopts "v:n:" args;
     do
         case "${args}" in
@@ -98,11 +96,12 @@ function print_nodejs_finish(){
                 NPM_VERSION=${OPTARG}
                 ;;
             *)
-            ;;
+                ;;
         esac
     done
+    NODEJS_VERSION=${NODEJS_VERSION:-"14"}
+    NPM_VERSION=${NPM_VERSION:-"7"}
 
-    # OPTARG contains v argurement
     install_nodejs "$NODEJS_VERSION" "$NPM_VERSION"
     tput reset
     print_nodejs_finish

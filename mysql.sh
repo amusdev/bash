@@ -204,21 +204,21 @@ function install_mysql(){
     # capture_ubuntu_major_version from common.sh
     UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
  
-    VERSION=""
- 
     while getopts "v:p:" args;
     do
         case "${args}" in
             v)
-                VERSION=${OPTARG}
+                MYSQL_VERSION=${OPTARG}
                 ;;
             p)
-                PASSWORD=${OPTARG}
+                MYSQL_PASSWORD=${OPTARG}
                 ;;
             *)
                 ;;
         esac
     done
+    MYSQL_VERSION=${MYSQL_VERSION:-"5.7"}
+    MYSQL_PASSWORD=${MYSQL_PASSWORD:-"P@ssw0rd"}
  
-    install_mysql $VERSION $PASSWORD
+    install_mysql $MYSQL_VERSION $MYSQL_PASSWORD
  fi

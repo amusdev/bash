@@ -22,11 +22,20 @@ LINUX_OS=$(capture_linux_version)
 # capture_centos_major_verison from common.sh
 CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-getopts "p:" args
+while getopts "p:" args;
+do
+    case "${args}" in
+        p)
+            PHP_VERSION=${OPTARG}
+            ;;
+        *)
+            ;;
+    esac
+done
+PHP_VERSION=${PHP_VERSION:-"7.3"}
 
 install_nginx
-# OPTARG contains v argurement
-install_php "$OPTARG"
+install_php "$PHP_VERSION"
 
 tput reset
 print_nginx_finish

@@ -98,9 +98,19 @@ function print_php_finish(){
     # capture_centos_major_verison from common.sh
     CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
 
-    getopts "v:" args
-    # OPTARG contains v argurement
-    install_php "$OPTARG"
+    while getopts "v:" args;
+    do
+        case "${args}" in
+            v)
+                PHP_VERSION=${OPTARG}
+                ;;
+            *)
+                ;;
+        esac
+    done
+    PHP_VERSION=${PHP_VERSION:-"7.3"}
+
+    install_php "$PHP_VERSION"
     tput reset
     print_php_finish
  fi
