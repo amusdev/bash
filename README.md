@@ -8,20 +8,19 @@ CentOS 6 <= OS <= 8
 
 ## Usage
 ### Apache 2
-Execute this command will auto install Apache2 latest vesion
+Install `Apache2` latest vesion
 ```bash
 curl -s https://amusdev.github.io/bash/apache.sh | sudo bash
 ```
 ### Nginx
-Execute this command will auto install Nginx latest vesion
+Install `Nginx` latest vesion
 ```bash
 curl -s https://amusdev.github.io/bash/nginx.sh | sudo bash
 ```
 ### PHP
-Execute this command will auto install custom PHP version  
-Available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
+Install `PHP` version as `5.6` | `7.0` | `7.1` | `7.2` | `7.3` | `7.4` | `8.0`
 ```bash
-curl -s https://amusdev.github.io/bash/php.sh | sudo bash -s -- -v 7.3
+curl -s https://amusdev.github.io/bash/php.sh | sudo bash -s -- -v {{php_version}}
 ```
 #### Alternative
 ```bash
@@ -29,11 +28,10 @@ export PHP_VERSION=7.3
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash
 ```
 ### Node.js
-Execute this command will auto install custom Node.js version and npm version  
-Available version: 10, 11, 12, 13, 14, 15, 16  
-n: NPM version, available: 5, 6, 7
+Install `Node.js` version as `10.x` | `11.x` | `12.x` | `13.x` | `14.x` | `15.x` | `16.x`  
+Install `npm` version as `5.x` | `6.x` | `7.x`  
 ```bash
-curl -s https://amusdev.github.io/bash/nodejs.sh | sudo bash -s -- -v 16 -n 7
+curl -s https://amusdev.github.io/bash/nodejs.sh | sudo bash -s -- -v {{node_version}} -n {{npm_version}}
 ```
 #### Alternative
 ```bash
@@ -42,10 +40,9 @@ export NPM_VERSION=7
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash
 ```
 ### MySQL
-Execute this command will auto install custom MySQL version  
-Available version: 5.7, 8.0
+Install `MySQL` version as `5.7` | `8.0`
 ```bash
-curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash -s -- -v 5.7 -p "P@ssw0rd"
+curl -s https://amusdev.github.io/bash/mysql.sh | sudo bash -s -- -v {{MySQL_version}} -p {{MySQL_root_password}}
 ```
 #### Alternative
 ```bash
@@ -54,10 +51,10 @@ export MYSQL_PASSWORD=P@ssw0rd
 curl -s https://amusdev.github.io/bash/php.sh | sudo bash
 ```
 ### Apache + PHP
-Execute this command will auto install Apache2 latest vesion and custom PHP version  
-Available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
+Install `Apache2` latest version  
+Install `PHP` version as `5.6` | `7.0` | `7.1` | `7.2` | `7.3` | `7.4` | `8.0`
 ```bash
-curl -s https://amusdev.github.io/bash/apache_php.sh | sudo bash -s -- -p 7.3
+curl -s https://amusdev.github.io/bash/apache_php.sh | sudo bash -s -- -p {{php_version}}
 ```
 #### Alternative
 ```bash
@@ -65,10 +62,10 @@ export PHP_VERSION=7.3
 curl -s https://amusdev.github.io/bash/apache_php.sh | sudo bash
 ```
 ### Nginx + PHP
-Execute this command will auto install Nginx latest vesion and custom PHP version  
-Available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
+Install `Nginx` latest vesion  
+Install `PHP` version as `5.6` | `7.0` | `7.1` | `7.2` | `7.3` | `7.4` | `8.0`
 ```bash
-curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash -s -- -p 7.3
+curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash -s -- -p {{php_version}}
 ```
 #### Alternative
 ```bash
@@ -76,12 +73,11 @@ export PHP_VERSION=7.3
 curl -s https://amusdev.github.io/bash/nginx_php.sh | sudo bash
 ```
 ### Nginx + PHP + MySQL
-Execute this command will auto install Nginx latest vesion and custom PHP Version and custom MySQL version  
-PHP available version: 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0  
-MySQL available version: 5.7, 8.0  
-t = MySQL Password
+Install `Nginx` latest vesion  
+Install `PHP` version as `5.6` | `7.0` | `7.1` | `7.2` | `7.3` | `7.4` | `8.0`  
+Install `MySQL` version as `5.7` | `8.0`
 ```bash
-curl -s https://amusdev.github.io/bash/nginx_php_mysql.sh | sudo bash -s -- -p 7.3 -m 5.7 -t "P@ssw0rd"
+curl -s https://amusdev.github.io/bash/nginx_php_mysql.sh | sudo bash -s -- -p {{php_version}} -m {{MySQL_version}} -t {{MySQL_root_password}}
 ```
 #### Alternative
 ```bash
