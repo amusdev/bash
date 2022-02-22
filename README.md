@@ -1,10 +1,12 @@
 # Bash
-This repository aims to provide common bash script for using in production.  
+Common bash script for using in production.  
 
 ## Support Environments
-Ubuntu 16.04 <= OS <= 20.04  
-Debian 8 <= OS <= 10  
-CentOS 6 <= OS <= 8
+|OS     |Min    |Max  |
+|-------|-------|-----|
+|Ubuntu |16.04  |20.04|
+|Debian |8      |10   |
+|CentOS |6      |8    |
 
 ## Usage
 ### Apache 2
