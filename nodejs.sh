@@ -52,7 +52,10 @@ function install_nodejs(){
         apt-get install -y nodejs gcc
     else
         curl -sL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x | bash -
-        yum install -y nodejs gcc-c++
+        yum install -y nodejs
+        # Install gcc 5.0+
+        yum -y install centos-release-scl
+        yum -y install devtoolset-7-gcc devtoolset-7-gcc-c++
     fi
 
     npm install -g npm@${NPM_VERSION}
