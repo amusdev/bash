@@ -1,26 +1,23 @@
 #!/bin/bash
 
-source <(curl -s https://amusdev.github.io/bash/common.sh)
-source <(curl -s https://amusdev.github.io/bash/php.sh)
-source <(curl -s https://amusdev.github.io/bash/apache.sh)
+if [ -z ${BASH_COMMON_DEFINE+x} ]; then
+    if [ ! -f ./common.sh ]; then
+        source <(curl -s https://amusdev.github.io/bash/common.sh)
+    else
+        source ./common.sh
+    fi
+fi
 
 # check_env from common.sh
 check_env
-if [ $? -eq 1 ]; then
-    echo "This bash required root permission."
-    exit 1
-elif [ $? -eq 2 ]; then
-    echo "This bash only executable on Ubuntu, Debian, CentOS."
-    exit 1
-elif [ $? -eq 3 ]; then
-    echo "This bash only executable on CentOS 5 - 8."
-    exit 1
-fi
 
-# capture_linux_version from common.sh
-LINUX_OS=$(capture_linux_version)
-# capture_centos_major_verison from common.sh
-CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
+# common.sh
+import_from_local_or_remote modules/php.sh
+# common.sh
+import_from_local_or_remote modules/apache.sh
+
+# check_env from common.sh
+check_env
 
 while getopts "p:" args;
 do
@@ -32,11 +29,16 @@ do
             ;;
     esac
 done
-PHP_VERSION=${PHP_VERSION:-"7.3"}
+
+if [ -z "$PHP_VERSION" ]; then
+    require_php_version_from_cli PHP_VERSION
+fi
+
+install_php_check_available $PHP_VERSION
 
 install_apache
-install_php "$PHP_VERSION"
+install_php $PHP_VERSION
 
 tput reset
 print_apache_finish
-print_php_finish
+print_php_finish $PHP_VERSION

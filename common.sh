@@ -1,10 +1,14 @@
 #!/bin/bash
 
+BASH_COMMON_DEFINE=1
+
+INFO_STYLE="\e[32m"
+ERROR_STYLE="\e[31m"
+COMMEND_STYLE="\e[36m"
+VERSION_STYLE="\e[91m"
+
 # Capture the version of linux
-# 1 = Ubuntu
-# 2 = Debian
-# 3 = CentOS
-# 4 = others
+# return Ubuntu | Debian | CentOS | others
 function capture_linux_version(){
     # install required extension `lsb_release`
     if ! hash lsb_release 2>/dev/null; then
@@ -45,7 +49,7 @@ function capture_linux_version(){
 # will capture 6
 function capture_centos_major_verison(){
     if hash rpm 2>/dev/null; then
-        version=$(rpm --eval '%{centos}')
+        local version=$(rpm --eval '%{centos}')
     fi
     expr ${version:-0}
 }
@@ -54,33 +58,41 @@ function capture_centos_major_verison(){
 # eg. 20.04
 # will capture 20
 function capture_ubuntu_major_version(){
-    version=$(cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -d '=' -f 2 | cut -d '.' -f 1)
+    local version=$(cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -d '=' -f 2 | cut -d '.' -f 1)
     expr ${version:-0}
 }
 
 # Environment checking
 function check_env(){
-    LINUX_OS=$(capture_linux_version)
-    CENTOS_MAJOR_VERSION=$(capture_centos_major_verison)
-    UBUNTU_MAJOR_VERSION=$(capture_ubuntu_major_version)
-    
-    if [[ $LINUX_OS == "Others" ]]; then
-        return 2
+    local linux_os=$(capture_linux_version)
+    local centos_major=$(capture_centos_major_verison)
+    local ubuntu_major=$(capture_ubuntu_major_version)
+
+    if [[ $linux_os == "Others" ]]; then
+        local version_in_scope=0
+    elif [[ $linux_os == "Ubuntu" ]] && { [ $ubuntu_major -lt 16 ] || [ $ubuntu_major -gt 20 ]; }; then
+        local version_in_scope=0
+    elif [[ $linux_os == "CentOS" ]] && { [ $centos_major -lt 6 ] || [ $centos_major -gt 8 ]; }; then
+        local version_in_scope=0
+    else
+        local version_in_scope=1
     fi
 
-    if [[ $LINUX_OS == "Ubuntu" ]]; then
-        if [ $UBUNTU_MAJOR_VERSION -lt 16 ] || [ $CENTOS_MAJOR_VERSION -gt 20 ]; then
-            return 3
-        fi
+    if [[ $version_in_scope -ne 1 ]]; then
+        echo -e "This bash only executable on Ubuntu, Debian, CentOS.\nLearn more in https://github.com/amusdev/bash#support-environments"
+        exit 1
+    elif [[ $(/usr/bin/id -u) -ne 0 ]]; then
+        echo "This bash required root permission."
+        exit 1
     fi
+}
 
-    if [[ $LINUX_OS == "CentOS" ]]; then
-        if [ $CENTOS_MAJOR_VERSION -lt 6 ] || [ $CENTOS_MAJOR_VERSION -gt 8 ]; then
-            return 3
-        fi
-    fi
-
-    if [[ $(/usr/bin/id -u) -ne 0 ]]; then
-        return 1
+# import_from_local_or_remote(string file)
+function import_from_local_or_remote(){
+    local file=$1
+    if [ ! -f "./$file" ]; then
+        source <(curl -s "https://amusdev.github.io/bash/$file")
+    else
+        source "./$file"
     fi
 }
