@@ -8,7 +8,7 @@ if [ -z ${BASH_COMMON_DEFINE+x} ]; then
     fi
 fi
 
-PHP_AVAILABLE_VERSIONS=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0")
+PHP_AVAILABLE_VERSIONS=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0", "8.1")
 
 function build_extension_string(){
     # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
