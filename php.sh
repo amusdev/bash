@@ -8,6 +8,10 @@ function build_extension_string(){
     IFS=$old_ifs
 }
 
+function version {
+    printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ')
+}
+
 # ------------------------------------------------------
 # string LINUX_OS=?
 # int CENTOS_MAJOR_VERSION=?
@@ -43,7 +47,7 @@ function install_php(){
 
     # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
     EXTENDSIONS=("fpm" "bcmath" "common" "curl" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
-    if [[ $VERSION != "8.*" ]]; then
+    if [ $(version $VERSION) -lt $(version 8.0) ]; then
         EXTENDSIONS+=("json")
     fi
 
