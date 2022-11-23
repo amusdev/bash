@@ -42,7 +42,10 @@ function install_php(){
     fi
 
     # support Laravel, Wordpress, Woocommerce, OpenCart, Magento and related program
-    EXTENDSIONS=("fpm" "bcmath" "common" "curl" "json" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
+    EXTENDSIONS=("fpm" "bcmath" "common" "curl" "mysql" "mbstring" "xml" "zip" "gd" "soap" "ssh2" "tokenizer" "intl" "xsl" "mcrypt")
+    if [[ $VERSION != "8.*" ]]; then
+        EXTENDSIONS+=("json")
+    fi
 
     if [[ $LINUX_OS == "Ubuntu" ]];
     then
